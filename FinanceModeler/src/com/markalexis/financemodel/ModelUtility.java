@@ -23,9 +23,10 @@ public class ModelUtility {
 	public ModelSetup MS = new ModelSetup();
 	//public int YearCount = 30;		//How many years to model?
 	public YearData modelData[]= null;	
+	//Observable List for use with parent table control
 	public ObservableList<YearData> modelDataList = FXCollections.observableArrayList();
 	//--------------------------------------------------------
-	//Use this ol for charting in parent FX apps
+	//Use this observable list for charting in parent FX apps
 	Series<String, Double> balanceSeries = new Series<String, Double>();
 	//public double[] balance;
 	//public int[] years;
@@ -51,8 +52,12 @@ public class ModelUtility {
 		//Runs a financial model over multiple years
 		//TODO: return an array of YearData
 		YearData modelData[]= new YearData[yearCount];
+		//Clear Chart Data collections before running a new model
+		modelDataList.clear();
+		//balanceDataList.clear();
+		
 		//balance = new double[yearCount];
-		//balanceSeries.getData().clear();
+		balanceSeries.getData().clear();
 		//balanceDataList.addAll(balanceSeries);
 		//balanceDataList.clear();
 		

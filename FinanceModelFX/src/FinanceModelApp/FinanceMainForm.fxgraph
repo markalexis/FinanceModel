@@ -1,0 +1,10 @@
+package FinanceModelApp
+
+import javafx.scene.layout.BorderPane
+import FinanceModelApp.FMainController
+
+component FinanceMainForm controlledby FMainController {
+	BorderPane {
+		//TODO Add Nodes
+	}
+}
