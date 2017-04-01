@@ -66,7 +66,7 @@ public class RunModel {
 			}
 
 			String StatusMsg = ThisYear.getYear() + " " + 
-					" ["+ ThisYear.age +"] " +
+					" ["+ ThisYear.getAge() +"] " +
 					" SGainPct: " + MU.ToPct(ThisYear.marketGainPercent) +
 					" Gains: "+ MU.ToCurrency(ThisYear.getMarketGains()) +
 					" Bal: " + MU.ToCurrency(ThisYear.endBalance) +

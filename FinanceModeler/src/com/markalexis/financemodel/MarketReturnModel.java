@@ -19,7 +19,7 @@ public class MarketReturnModel {
 	//--------------------------------------------------------
 	public double maxReturnPercent = 0.15;
 	public double minreturnPercent = -0.05;
-	public double[] dowHistory= new double[23]; 
+	public double[] dowHistory= new double[25]; 
 	public double GetCalculatedReturn(){
 		//returns a value based on random choice with the range Max - Min Pct
 		double rn = Math.random();
@@ -51,6 +51,10 @@ public class MarketReturnModel {
 	private void BuildDOWHistory(){
 		//Builds an array containing historical DOW market returns
 		//The year is included just as a reference when updating table data
+		//See http://www.forecast-chart.com/historical-dow-industrial.html
+		//See http://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/histretSP.html
+		//
+		
 		dowHistory[0]= 0.305;//1991	30.5%
 		dowHistory[1]= 0.076;//1992	7.6%
 		dowHistory[2]= 0.101;//1993	10.1%
@@ -74,6 +78,9 @@ public class MarketReturnModel {
 		dowHistory[20]= 0.021;//2011	2.1%
 		dowHistory[21]= 0.160;//2012	16.0%
 		dowHistory[22]= 0.324;//2013	32.4%
+		dowHistory[23]= 0.0752;//2014
+		dowHistory[24]= -0.0223;//2015
+		
 		
 	}
 

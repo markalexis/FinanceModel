@@ -27,11 +27,17 @@ public class ModelUtility {
 	public ObservableList<YearData> modelDataList = FXCollections.observableArrayList();
 	//--------------------------------------------------------
 	//Use this observable list for charting in parent FX apps
-	Series<String, Double> balanceSeries = new Series<String, Double>();
+	public Series<String, Double> balanceSeries = new Series<String, Double>();
+	public Series<String, Double> incomeSeries = new Series<String, Double>();
+	public Series<String, Double> incomeGoalSeries = new Series<String, Double>();
+	public Series<String, Double> savingsDrawSeries = new Series<String, Double>();
+	
 	//public double[] balance;
 	//public int[] years;
 	//public ObservableList<Data<String, Double>> balanceDataList  = new FXCollections.observableArrayList();
 	public ObservableList<Series<String,Double>> balanceDataList = FXCollections.observableArrayList();
+	public ObservableList<Series<String,Double>> incomeDataList = FXCollections.observableArrayList();
+	
 	//--------------------------------------------------------------------------------------------------
 	//Use the utility
 	//ModelUtility MU = new ModelUtility();
@@ -58,13 +64,20 @@ public class ModelUtility {
 		
 		//balance = new double[yearCount];
 		balanceSeries.getData().clear();
+		incomeSeries.getData().clear();
+		incomeSeries.setName("Income");
+		incomeGoalSeries.getData().clear();
+		incomeGoalSeries.setName("Goal");
+		savingsDrawSeries.getData().clear();
+		savingsDrawSeries.setName("Savings Draw");
+		
 		//balanceDataList.addAll(balanceSeries);
 		//balanceDataList.clear();
 		
 		//Now iterate over all years
 				for (int i =0; i<yearCount;i++){
 					
-					//Create a new YearData class
+					//Create a new YearData class each year of the model creates a new instance
 					YearData ThisYear = new YearData();
 					//ThisYear = (YearData)ModelData[i];
 					
@@ -73,7 +86,7 @@ public class ModelUtility {
 						// Set up Year 0, the starting year
 						ThisYear.setStartBalance(MS.startBalance);
 						ThisYear.setYear(MS.startYear);
-						ThisYear.age = MS.ageStart;
+						ThisYear.setAge((double) MS.ageStart);
 						ThisYear.setIncomeGoalWithInflation(MS.incomeDesired);
 					}
 					else{
@@ -82,12 +95,12 @@ public class ModelUtility {
 						YearData LastYear = (YearData)modelData[i-1];
 						ThisYear.setStartBalance(LastYear.endBalance);
 						ThisYear.setYear(LastYear.getYear()+1);
-						ThisYear.age = LastYear.age +1;
+						ThisYear.setAge(LastYear.getAge() +1);
 						ThisYear.setIncomeGoalWithInflation(LastYear.getIncomeGoalWithInflation()* (1.00+MS.inflationRateStatic));
 					}
 					
 					//Set up the age related flags for this year
-					if(ThisYear.age>=MS.ageRetire){
+					if(ThisYear.getAge()>=MS.ageRetire){
 						ThisYear.retired = true;
 						ThisYear.incomePension = MS.pensionIncome;
 						ThisYear.savingsContribution =0;
@@ -98,14 +111,22 @@ public class ModelUtility {
 						ThisYear.setSavingsWithdraw(0);
 						ThisYear.savingsContribution = MS.savingsContributions;
 					}
-					//Social security Income?
-					if(ThisYear.age>=MS.ageSSSelf){
+					//Social security Income - two sources at different times
+					if(ThisYear.getAge()>=MS.ageSSSelf){
+						//TODO: Add inflation adjustments to SS
 						ThisYear.incomeSSSelf = MS.socialSecurityIncomeSelf;
 					}
 					else{
 						ThisYear.incomeSSSelf = 0;
 					}
-					
+					//Social security Income - two sources at different times
+					if(ThisYear.getAge()>=MS.ageSSSpouse){
+						//TODO: Add inflation adjustments to SS
+						ThisYear.incomeSSSpouse = MS.socialSecurityIncomeSpouse;
+					}
+					else{
+						ThisYear.incomeSSSpouse = 0;
+					}
 					//Once all income sources have been identified, determine what must be withdrawn from savings
 					//What is the allowed savings withrawal?
 					double DrawLimit = MS.maxPercentWithdraw*ThisYear.getStartBalance();
@@ -193,16 +214,27 @@ public class ModelUtility {
 					modelDataList.add(ThisYear);
 					//For FX charting
 					
-					int y = ThisYear.getYear();
-					String yS = Integer.toString(y);
+					Double y = ThisYear.getAge();
+					String yS = y.toString(y);
 					XYChart.Data newData = new Data(yS, ThisYear.endBalance);
+					XYChart.Data incomeData = new Data(yS, ThisYear.getIncomeTotal());
+					XYChart.Data incomeGoalData = new Data(yS, ThisYear.getIncomeGoalWithInflation() );
+					XYChart.Data savingsDrawData = new Data(yS, ThisYear.getSavingsWithdraw() );
+					
 					//balanceSeries.getData().add(new XYChart.Data(Integer.toString(y), ThisYear.endBalance));
 					balanceSeries.getData().add(newData);
+					incomeSeries.getData().add(incomeData);
+					incomeGoalSeries.getData().add(incomeGoalData);
+					savingsDrawSeries.getData().add(savingsDrawData);
+					
+					
 					//balanceDataList.addAll(newData);
 					
 				}
 				//Update the Chart Observable List
-				balanceDataList.addAll(balanceSeries);
+				//balanceDataList.addAll(balanceSeries);
+				//incomeDataList.addAll(incomeSeries);
+				
 				
 				//Return the results
 				return modelData;

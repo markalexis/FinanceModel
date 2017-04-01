@@ -11,7 +11,7 @@ public class YearData {
 	private double startBalance = 0;
 	private String startBalanceFormatted = "";
 	public double endBalance =0;
-	public int age = 0;
+	private Double age = 0.0;
 	public boolean retired = false;
 	public boolean incomeGoalMet = true;
 	private double marketGains =0;		//In dollars
@@ -50,7 +50,7 @@ public class YearData {
 		}
 
 		String StatusMsg = this.getYear() + " " + 
-				" ["+ this.age +"] " +
+				" ["+ this.getAge() +"] " +
 				" SGainPct: " + this.ToPct(this.marketGainPercent) +
 				" Gains: "+ this.ToCurrency(this.getMarketGains()) +
 				" Bal: " + this.ToCurrency(this.endBalance) +
@@ -144,6 +144,12 @@ public class YearData {
 	}
 	public void setSavingsWithdrawFormatted(String savingsWithdrawFormatted) {
 		this.savingsWithdrawFormatted = savingsWithdrawFormatted;
+	}
+	public Double getAge() {
+		return age;
+	}
+	public void setAge(Double double1) {
+		this.age = double1;
 	}
 	
 }
