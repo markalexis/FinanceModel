@@ -1,0 +1,7 @@
+ageRetire=62
+ageSSSelf=67
+ageSSSpouse=67
+ageStart=54
+incomeDesired=100000.0
+startBalance = 150000
+
